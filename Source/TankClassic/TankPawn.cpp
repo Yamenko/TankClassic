@@ -1,13 +1,39 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
+//=====================================================================================================
 #include "TankPawn.h"
+#include "Components/StaticMeshComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 
-// Sets default values
-ATankPawn::ATankPawn()
-{
-	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+
+//=====================================================================================================
+// Конструктор класса #ТАНК
+//=====================================================================================================
+ATankPawn::ATankPawn(){
+	//-----------------------------------------------------------------
+	// Обновлять каждый тик
+	//-----------------------------------------------------------------
 	PrimaryActorTick.bCanEverTick = true;
+
+	//-----------------------------------------------------------------
+	// Создание обхектов танка при спавне
+	//-----------------------------------------------------------------
+	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank body"));
+	BodyMesh->SetupAttachment(RootComponent);
+	//-----------------------------------------------------------------
+	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turret"));
+	TurretMesh->SetupAttachment(BodyMesh);
+	//-----------------------------------------------------------------
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
+	SpringArm->SetupAttachment(TurretMesh);
+	SpringArm->bDoCollisionTest = false;
+	SpringArm->bInheritPitch = false;
+	SpringArm->bInheritRoll = false;
+	SpringArm->bInheritYaw = false;
+	//-----------------------------------------------------------------
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->SetupAttachment(SpringArm);
+
+//	Cannon
 
 }
 
