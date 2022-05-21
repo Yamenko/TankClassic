@@ -4,9 +4,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 
-
 //=====================================================================================================
-// Конструктор класса #ТАНК
+// Конструктор класса ТАНК
 //=====================================================================================================
 ATankPawn::ATankPawn(){
 	//-----------------------------------------------------------------
@@ -38,23 +37,41 @@ ATankPawn::ATankPawn(){
 }
 
 // Called when the game starts or when spawned
-void ATankPawn::BeginPlay()
-{
+void ATankPawn::BeginPlay(){
 	Super::BeginPlay();
-	
 }
 
-// Called every frame
-void ATankPawn::Tick(float DeltaTime)
-{
+//=====================================================================================================
+// Покадровое изменение (тик)
+//=====================================================================================================
+void ATankPawn::Tick(float DeltaTime){
 	Super::Tick(DeltaTime);
 
+	//-----------------------------------------------------------------
+	// Движение вперед-назад
+	//-----------------------------------------------------------------
+	FVector const CurrentPosition = GetActorLocation();
+	FVector const ForwardVector	= GetActorForwardVector();
+	FVector	NewPosition		= CurrentPosition + ForwardVector * MoveSpeed *	TargetForwardAxisValue * DeltaTime;
+
+	SetActorLocation(NewPosition, true);
+
+	//-----------------------------------------------------------------
+	// Движение повороты
+	//-----------------------------------------------------------------
+	FRotator CurrentRotation = GetActorRotation();
+	CurrentRotation.Yaw += TargetRightAxisValue * DeltaTime;
+
+	SetActorRotation(CurrentRotation, ETeleportType::None);
 }
 
-// Called to bind functionality to input
-void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
+//=====================================================================================================
+// Функции управления
+//=====================================================================================================
+void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent){
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
+
+void ATankPawn::MoveForward(float AxisValue)	{ TargetForwardAxisValue = AxisValue; }
+void ATankPawn::RotateRight(float AxisValue)	{ TargetRightAxisValue = AxisValue; }
 

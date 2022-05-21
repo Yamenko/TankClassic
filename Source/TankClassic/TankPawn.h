@@ -13,7 +13,7 @@ class UCameraComponent;
 //=====================================================================================================
 //=====================================================================================================
 UCLASS()
-class TANKCLASSIC_API ATankPawn : public APawn 
+class TANKCLASSIC_API ATankPawn : public APawn
 { 
 	GENERATED_BODY()
 public:
@@ -34,6 +34,9 @@ public:
 
 	UFUNCTION()
 	void MoveForward(float AxisValue);
+
+	UFUNCTION()
+	void RotateRight(float AxisValue);
 
 protected:
 	//-----------------------------------------------------------------
@@ -64,6 +67,7 @@ protected:
 	float RotationSpeed = 0.0f;
 
 private:
-
+	float TargetForwardAxisValue;
+	float TargetRightAxisValue;
 };
 //=====================================================================================================
