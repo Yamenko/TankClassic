@@ -18,6 +18,7 @@ ATankPawn::ATankPawn(){
 	//-----------------------------------------------------------------
 	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank body"));
 	BodyMesh->SetupAttachment(RootComponent);
+	//SetRootComponent(BodyMesh);
 	//BodyMesh->SetSimulatePhysics(true);
 	
 	//-----------------------------------------------------------------
@@ -55,24 +56,20 @@ void ATankPawn::Tick(float DeltaTime){
 	FVector const CurrentPosition = GetActorLocation();
 	FVector const ForwardVector	= GetActorForwardVector();
 	FVector const RightVector = GetActorRightVector();
-	FVector	NewPosition		=	CurrentPosition + \
+	FVector	const NewPosition =	CurrentPosition + \
 								(ForwardVector * MoveSpeed *	TargetForwardAxisValue + \
 								RightVector * MoveSpeed * TargetRightAxisValue) * DeltaTime;
 
 	SetActorLocation(NewPosition, true);
 
-
-	
-
-
-
 	//-----------------------------------------------------------------
 	// Движение повороты
 	//-----------------------------------------------------------------
 	FRotator CurrentRotation = GetActorRotation();
-	CurrentRotation.Yaw += TargetRightRotateValue * DeltaTime;
-
-	SetActorRotation(CurrentRotation, ETeleportType::None);
+	CurrentRightAxisValue = FMath::Lerp(CurrentRightAxisValue, TargetRightRotateValue, InterpolarKeyRotate);
+	CurrentRotation.Yaw += RotationSpeed * CurrentRightAxisValue * DeltaTime;
+	FRotator NewRotation = FRotator(0, CurrentRotation.Yaw, 0);
+	SetActorRotation(NewRotation);
 }
 
 //=====================================================================================================

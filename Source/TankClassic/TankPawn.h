@@ -66,10 +66,15 @@ protected:
 	float MoveSpeed = 0.0f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement | Speed")
 	float RotationSpeed = 0.0f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement | Soeed")
+	float InterpolarKeyRotate = 0.01f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement | Soeed")
+	float InterpolarKeyMove = 0.01f;
 
 private:
 	float TargetForwardAxisValue;
 	float TargetRightAxisValue;
 	float TargetRightRotateValue;
+	float CurrentRightAxisValue;
 };
 //=====================================================================================================
