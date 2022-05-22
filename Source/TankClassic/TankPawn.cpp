@@ -18,6 +18,8 @@ ATankPawn::ATankPawn(){
 	//-----------------------------------------------------------------
 	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank body"));
 	BodyMesh->SetupAttachment(RootComponent);
+	//BodyMesh->SetSimulatePhysics(true);
+	
 	//-----------------------------------------------------------------
 	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turret"));
 	TurretMesh->SetupAttachment(BodyMesh);
@@ -52,15 +54,23 @@ void ATankPawn::Tick(float DeltaTime){
 	//-----------------------------------------------------------------
 	FVector const CurrentPosition = GetActorLocation();
 	FVector const ForwardVector	= GetActorForwardVector();
-	FVector	NewPosition		= CurrentPosition + ForwardVector * MoveSpeed *	TargetForwardAxisValue * DeltaTime;
+	FVector const RightVector = GetActorRightVector();
+	FVector	NewPosition		=	CurrentPosition + \
+								(ForwardVector * MoveSpeed *	TargetForwardAxisValue + \
+								RightVector * MoveSpeed * TargetRightAxisValue) * DeltaTime;
 
 	SetActorLocation(NewPosition, true);
+
+
+	
+
+
 
 	//-----------------------------------------------------------------
 	// Движение повороты
 	//-----------------------------------------------------------------
 	FRotator CurrentRotation = GetActorRotation();
-	CurrentRotation.Yaw += TargetRightAxisValue * DeltaTime;
+	CurrentRotation.Yaw += TargetRightRotateValue * DeltaTime;
 
 	SetActorRotation(CurrentRotation, ETeleportType::None);
 }
@@ -72,6 +82,7 @@ void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void ATankPawn::MoveForward(float AxisValue)	{ TargetForwardAxisValue = AxisValue; }
-void ATankPawn::RotateRight(float AxisValue)	{ TargetRightAxisValue = AxisValue; }
+void ATankPawn::MoveForward	(float AxisValue)	{ TargetForwardAxisValue = AxisValue; }
+void ATankPawn::MoveRight	(float AxisValue)	{ TargetRightAxisValue = AxisValue; }
+void ATankPawn::RotateRight	(float AxisValue)	{ TargetRightRotateValue = AxisValue; }
 

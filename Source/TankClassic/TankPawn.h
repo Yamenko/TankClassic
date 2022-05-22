@@ -34,7 +34,8 @@ public:
 
 	UFUNCTION()
 	void MoveForward(float AxisValue);
-
+	UFUNCTION()
+	void MoveRight(float AxisValue);
 	UFUNCTION()
 	void RotateRight(float AxisValue);
 
@@ -69,5 +70,6 @@ protected:
 private:
 	float TargetForwardAxisValue;
 	float TargetRightAxisValue;
+	float TargetRightRotateValue;
 };
 //=====================================================================================================

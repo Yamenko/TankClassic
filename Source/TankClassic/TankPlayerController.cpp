@@ -22,11 +22,18 @@ void ATankPlayerController::SetupInputComponent(){
 	InputComponent->BindAxis("MoveForward", this,	&ATankPlayerController::MoveForward);
 
 	//-----------------------------------------------------------------
+	// Привязываем кнопки к функции движения лево-право
+	//-----------------------------------------------------------------
+	InputComponent->BindAxis("MoveRight", this, &ATankPlayerController::MoveRight);
+
+	//-----------------------------------------------------------------
 	// Привязываем кнопки к функции движения поворот
 	//-----------------------------------------------------------------
 	InputComponent->BindAxis("RotateRight", this, &ATankPlayerController::RotateRight);
 }
 
+
 void ATankPlayerController::MoveForward(float AxisValue) { TankPawn->MoveForward(AxisValue); }
+void ATankPlayerController::MoveRight(float AxisValue)	 { TankPawn->MoveRight(AxisValue);	 }
 void ATankPlayerController::RotateRight(float AxisValue) { TankPawn->RotateRight(AxisValue); }
 

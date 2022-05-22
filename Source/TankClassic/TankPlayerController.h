@@ -19,11 +19,17 @@ class TANKCLASSIC_API ATankPlayerController : public APlayerController
 protected:
 	UPROPERTY()
 	class ATankPawn* TankPawn;
-
+	//-----------------------------------------------------------------
+	// Настройка 
+	//-----------------------------------------------------------------
 	virtual void SetupInputComponent() override;
 	virtual void BeginPlay() override;
 
+	//-----------------------------------------------------------------
+	// Движение 
+	//-----------------------------------------------------------------
 	void MoveForward(float AxisValue);
+	void MoveRight	(float AxisValue);
 	void RotateRight(float AxisValue);
 
 public:
