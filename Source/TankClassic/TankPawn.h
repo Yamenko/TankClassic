@@ -2,6 +2,11 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Components/StaticMeshComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
+#include "TankPlayerController.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "TankPawn.generated.h"
 //=====================================================================================================
 //=====================================================================================================
@@ -45,6 +50,9 @@ protected:
 	//-----------------------------------------------------------------
 	virtual void BeginPlay() override;
 
+	UPROPERTY()
+	class ATankPlayerController* TankController;
+
 	//-----------------------------------------------------------------
 	// Меши и компоненты
 	//-----------------------------------------------------------------
@@ -66,10 +74,12 @@ protected:
 	float MoveSpeed = 0.0f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement | Speed")
 	float RotationSpeed = 0.0f;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement | Soeed")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement | Speed")
 	float InterpolarKeyRotate = 0.01f;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement | Soeed")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement | Speed")
 	float InterpolarKeyMove = 0.01f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret	 | Speed")
+	float TurretRotationInterpolationKey = 0.5f;
 
 private:
 	float TargetForwardAxisValue;
