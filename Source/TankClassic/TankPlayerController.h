@@ -17,11 +17,12 @@ protected:
 	UPROPERTY()	FVector MousePos;
 
 	//-----------------------------------------------------------------
-	// Движение 
+	// Движение, действия
 	//-----------------------------------------------------------------
 	void MoveForward(float AxisValue);
 	void MoveRight	(float AxisValue);
 	void RotateRight(float AxisValue);
+	void Fire();
 
 public:
 	//-----------------------------------------------------------------

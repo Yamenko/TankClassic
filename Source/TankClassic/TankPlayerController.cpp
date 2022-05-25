@@ -69,10 +69,17 @@ void ATankPlayerController::SetupInputComponent(){
 	// Привязываем кнопки к функции движения поворот
 	//-----------------------------------------------------------------
 	InputComponent->BindAxis("RotateRight", this, &ATankPlayerController::RotateRight);
+
+	//-----------------------------------------------------------------
+	// Привязываем кнопку к выстрелу
+	//-----------------------------------------------------------------
+	InputComponent->BindAction("Fire", IE_Pressed, this, &ATankPlayerController::Fire);
 }
 
 
 void ATankPlayerController::MoveForward(float AxisValue) { TankPawn->MoveForward(AxisValue); }
 void ATankPlayerController::MoveRight(float AxisValue)	 { TankPawn->MoveRight(AxisValue);	 }
 void ATankPlayerController::RotateRight(float AxisValue) { TankPawn->RotateRight(AxisValue); }
+void ATankPlayerController::Fire()						 { TankPawn->Fire();}
+
 

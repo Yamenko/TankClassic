@@ -8,13 +8,37 @@
 DECLARE_LOG_CATEGORY_EXTERN(LogTMP_Tank, All, All);
 DEFINE_LOG_CATEGORY(LogTMP_Tank);
 
-// Called when the game starts or when spawned
+//=====================================================================================================
+// Действия на старте
+//=====================================================================================================
 void ATankPawn::BeginPlay(){
 	Super::BeginPlay();
 
 	TankController = Cast<ATankPlayerController>(GetController());
+	SetupCannon();
+}
+
+//=====================================================================================================
+// Настройка пушки
+//=====================================================================================================
+void ATankPawn::SetupCannon() {
+
+	if (Cannon) { Cannon->Destroy(); }
+
+	FActorSpawnParameters params;
+	params.Instigator = this;
+	params.Owner = this;
+	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, params);
+	Cannon->AttachToComponent(CannonSetupPoint,
+		FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 
 }
+
+//=====================================================================================================
+// Выстрел
+//=====================================================================================================
+void ATankPawn::Fire(){	if (Cannon)	{Cannon->Fire();}}
+
 
 //=====================================================================================================
 // Конструктор класса ТАНК
@@ -30,8 +54,6 @@ ATankPawn::ATankPawn(){
 	//-----------------------------------------------------------------
 	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank body"));
 	BodyMesh->SetupAttachment(RootComponent);
-	//RootComponent = BodyMesh;
-	
 	//-----------------------------------------------------------------
 	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turret"));
 	TurretMesh->SetupAttachment(BodyMesh);
@@ -45,8 +67,10 @@ ATankPawn::ATankPawn(){
 	//-----------------------------------------------------------------
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
-
-	//	Cannon
+	//-----------------------------------------------------------------
+	CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Cannon setup point"));
+	CannonSetupPoint->AttachToComponent(TurretMesh,	FAttachmentTransformRules::KeepRelativeTransform);
+	//-----------------------------------------------------------------
 }
 
 //=====================================================================================================
@@ -103,4 +127,3 @@ void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void ATankPawn::MoveForward				 (float AxisValue)						{ TargetForwardAxisValue = AxisValue; }
 void ATankPawn::MoveRight				 (float AxisValue)						{ TargetRightAxisValue = AxisValue; }
 void ATankPawn::RotateRight				 (float AxisValue)						{ TargetRightRotateValue = AxisValue; }
-
