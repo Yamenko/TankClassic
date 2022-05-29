@@ -2,11 +2,11 @@
 #include "TankPlayerController.h"
 //=====================================================================================================
 
-//=====================================================================================================
-// Декларирование переменных и макросов
-//=====================================================================================================
-DECLARE_LOG_CATEGORY_EXTERN(LogTMP_Mouse, All, All);
-DEFINE_LOG_CATEGORY(LogTMP_Mouse);
+////=====================================================================================================
+//// Декларирование переменных и макросов
+////=====================================================================================================
+//DECLARE_LOG_CATEGORY_EXTERN(LogTMP_Mouse, All, All);
+//DEFINE_LOG_CATEGORY(LogTMP_Mouse);
 
 //=====================================================================================================
 // Конструктор контроллера
@@ -74,6 +74,8 @@ void ATankPlayerController::SetupInputComponent(){
 	// Привязываем кнопку к выстрелу
 	//-----------------------------------------------------------------
 	InputComponent->BindAction("Fire", IE_Pressed, this, &ATankPlayerController::Fire);
+	InputComponent->BindAction("FireSecond", IE_Pressed, this, &ATankPlayerController::FireSecond);
+	InputComponent->BindAction("AutoFire", IE_Pressed, this, &ATankPlayerController::AutoFire);
 }
 
 
@@ -81,5 +83,6 @@ void ATankPlayerController::MoveForward(float AxisValue) { TankPawn->MoveForward
 void ATankPlayerController::MoveRight(float AxisValue)	 { TankPawn->MoveRight(AxisValue);	 }
 void ATankPlayerController::RotateRight(float AxisValue) { TankPawn->RotateRight(AxisValue); }
 void ATankPlayerController::Fire()						 { TankPawn->Fire();}
-
+void ATankPlayerController::FireSecond() 				 { TankPawn->FireSecond(); }
+void ATankPlayerController::AutoFire()					 { TankPawn->AutoFire(); }
 

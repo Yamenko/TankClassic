@@ -44,18 +44,20 @@ public:
 	UFUNCTION()	void MoveRight(float AxisValue);
 	UFUNCTION()	void RotateRight(float AxisValue);
 	UFUNCTION()	void Fire();
+	UFUNCTION()	void FireSecond();
+	UFUNCTION()	void AutoFire();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tools | dX Line trace")
-	float dif_X_line = 0.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tools | dY Line trace")
-	float dif_Y_line = 0.0f;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tools | dX Line trace")
+	//float dif_X_line = 0.0f;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tools | dY Line trace")
+	//float dif_Y_line = 0.0f;
 
 protected:
 	//-----------------------------------------------------------------
 	// Called when the game starts or when spawned
 	//-----------------------------------------------------------------
 	virtual void BeginPlay() override;
-	void SetupCannon();
+	
 
 	UPROPERTY()	class ATankPlayerController* TankController;
 	UPROPERTY() class ACannon* Cannon;
@@ -78,6 +80,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
 	TSubclassOf<ACannon> CannonClass;
 
+	void SetupCannon();
+
 	//-----------------------------------------------------------------
 	// Переменные
 	//-----------------------------------------------------------------
@@ -97,5 +101,6 @@ private:
 	float TargetRightAxisValue;
 	float TargetRightRotateValue;
 	float CurrentRightAxisValue;
+
 };
 //=====================================================================================================

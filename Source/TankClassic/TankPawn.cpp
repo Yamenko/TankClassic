@@ -3,47 +3,20 @@
 //=====================================================================================================
 
 //=====================================================================================================
-// Декларирование переменных и макросов
-//=====================================================================================================
-DECLARE_LOG_CATEGORY_EXTERN(LogTMP_Tank, All, All);
-DEFINE_LOG_CATEGORY(LogTMP_Tank);
-
-//=====================================================================================================
 // Действия на старте
 //=====================================================================================================
 void ATankPawn::BeginPlay(){
 	Super::BeginPlay();
-
 	TankController = Cast<ATankPlayerController>(GetController());
+
 	SetupCannon();
 }
-
-//=====================================================================================================
-// Настройка пушки
-//=====================================================================================================
-void ATankPawn::SetupCannon() {
-
-	if (Cannon) { Cannon->Destroy(); }
-
-	FActorSpawnParameters params;
-	params.Instigator = this;
-	params.Owner = this;
-	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, params);
-	Cannon->AttachToComponent(CannonSetupPoint,
-		FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-
-}
-
-//=====================================================================================================
-// Выстрел
-//=====================================================================================================
-void ATankPawn::Fire(){	if (Cannon)	{Cannon->Fire();}}
-
 
 //=====================================================================================================
 // Конструктор класса ТАНК
 //=====================================================================================================
 ATankPawn::ATankPawn(){
+
 	//-----------------------------------------------------------------
 	// Обновлять каждый тик чтобы можно было двигать танк
 	//-----------------------------------------------------------------
@@ -71,6 +44,21 @@ ATankPawn::ATankPawn(){
 	CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Cannon setup point"));
 	CannonSetupPoint->AttachToComponent(TurretMesh,	FAttachmentTransformRules::KeepRelativeTransform);
 	//-----------------------------------------------------------------
+}
+
+//=====================================================================================================
+// Настройка пушки
+//=====================================================================================================
+void ATankPawn::SetupCannon() {
+
+	if (Cannon) { Cannon->Destroy(); }
+
+	FActorSpawnParameters params;
+	params.Instigator = this;
+	params.Owner = this;
+	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, params);
+	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::KeepRelativeTransform); //     KeepRelativeTransform SnapToTargetNotIncludingScale
+
 }
 
 //=====================================================================================================
@@ -118,6 +106,7 @@ void ATankPawn::Tick(float DeltaTime){
 	// Логи (вывод сообщений)
 	//-----------------------------------------------------------------
 	// UE_LOG(LogTMP_Tank, Warning, TEXT("Position tank: x = %00.00f, y = %00.00f, z = %00.00f"), NewPosition.X, NewPosition.Y, NewPosition.Z);
+	
 }
 
 //=====================================================================================================
@@ -127,3 +116,10 @@ void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void ATankPawn::MoveForward				 (float AxisValue)						{ TargetForwardAxisValue = AxisValue; }
 void ATankPawn::MoveRight				 (float AxisValue)						{ TargetRightAxisValue = AxisValue; }
 void ATankPawn::RotateRight				 (float AxisValue)						{ TargetRightRotateValue = AxisValue; }
+
+//=====================================================================================================
+// Выстрел
+//=====================================================================================================
+void ATankPawn::Fire() { if (Cannon) { Cannon->Fire(); } }
+void ATankPawn::FireSecond() { if (Cannon) { Cannon->FireSecond(); } }
+void ATankPawn::AutoFire() { if (Cannon) { Cannon->AutoFire(); } }

@@ -3,8 +3,9 @@
 
 #include "CoreMinimal.h"
 #include "GameStructs.h"
-#include "GameFramework/Actor.h"
+#include "Logging/LogMacros.h"
 #include "Components/ArrowComponent.h"
+#include "GameFramework/Actor.h"
 #include "Components/StaticMeshComponent.h"
 #include "TimerManager.h"
 #include "Engine/Engine.h"
@@ -26,12 +27,18 @@ public:
 
 	ACannon();
 	void Fire();
+	void FireSecond();
+	void AutoFire();
 	bool IsReadyToFire();
 	void Reload();
 
 protected:
-
+	bool ReadyToFire = false;
 	virtual void BeginPlay() override;
+
+	UPROPERTY()	class ATankPawn* TankPawn;
+
+	FTimerHandle ReloadTimerHandle;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UStaticMeshComponent * Mesh;
@@ -46,9 +53,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
 	ECannonType Type = ECannonType::FireProjectile;
 
-	FTimerHandle ReloadTimerHandle;
+private:
 
-	bool ReadyToFire = false;
-
+	int Ammo;
 };
 //=====================================================================================================
