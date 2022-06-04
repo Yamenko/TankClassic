@@ -3,16 +3,18 @@
 
 #include "CoreMinimal.h"
 #include "GameStructs.h"
+#include "Projectile.h"
 #include "Logging/LogMacros.h"
 #include "Components/ArrowComponent.h"
-#include "GameFramework/Actor.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/SceneComponent.h"
+#include "GameFramework/Actor.h"
 #include "TimerManager.h"
 #include "Engine/Engine.h"
 #include "Cannon.generated.h"
 //=====================================================================================================
 //=====================================================================================================
-class UArrowComponent;
+//class UArrowComponent;
 
 
 //=====================================================================================================
@@ -32,29 +34,41 @@ public:
 	bool IsReadyToFire();
 	void Reload();
 
+	//virtual void Tick(float DeltaTime) override;
+
+	FTimerHandle ReloadTimerHandle;
+	FTimerHandle AutoFireTimerHandle;
+
 protected:
 	bool ReadyToFire = false;
 	virtual void BeginPlay() override;
+	void SpawnProjectile();
 
 	UPROPERTY()	class ATankPawn* TankPawn;
 
-	FTimerHandle ReloadTimerHandle;
 
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class UStaticMeshComponent * CannonMesh;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	UStaticMeshComponent * Mesh;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	UArrowComponent* ProjectileSpawnPoint;
+	class UArrowComponent* ProjectileSpawnPoint;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
 	float FireRate = 1;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
+	int ShootInFireRate = 3;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
 	float FireRange = 1000;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
 	float FireDamage = 1;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
 	ECannonType Type = ECannonType::FireProjectile;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
+	TSubclassOf<AProjectile> ProjectileClass;
+
+
 
 private:
-
 	int Ammo;
+	int CountShoot = 0;
 };
 //=====================================================================================================

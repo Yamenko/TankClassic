@@ -25,14 +25,8 @@ class TANKCLASSIC_API ATankPawn : public APawn
 { 
 	GENERATED_BODY()
 public:
-	//-----------------------------------------------------------------
-	// Конструктор класса (базовый)
-	//-----------------------------------------------------------------
 	ATankPawn();
 
-	//-----------------------------------------------------------------
-	// Called every frame
-	//-----------------------------------------------------------------
 	virtual void Tick(float DeltaTime) override;
 
 	//-----------------------------------------------------------------
@@ -47,17 +41,11 @@ public:
 	UFUNCTION()	void FireSecond();
 	UFUNCTION()	void AutoFire();
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tools | dX Line trace")
-	//float dif_X_line = 0.0f;
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tools | dY Line trace")
-	//float dif_Y_line = 0.0f;
-
 protected:
 	//-----------------------------------------------------------------
 	// Called when the game starts or when spawned
 	//-----------------------------------------------------------------
 	virtual void BeginPlay() override;
-	
 
 	UPROPERTY()	class ATankPlayerController* TankController;
 	UPROPERTY() class ACannon* Cannon;
@@ -69,8 +57,6 @@ protected:
 	UStaticMeshComponent* BodyMesh;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UStaticMeshComponent* TurretMesh;
-	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	//UStaticMeshComponent* Cannon;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	USpringArmComponent * SpringArm;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")

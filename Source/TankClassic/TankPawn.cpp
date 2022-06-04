@@ -16,7 +16,6 @@ void ATankPawn::BeginPlay(){
 // Конструктор класса ТАНК
 //=====================================================================================================
 ATankPawn::ATankPawn(){
-
 	//-----------------------------------------------------------------
 	// Обновлять каждый тик чтобы можно было двигать танк
 	//-----------------------------------------------------------------
@@ -26,7 +25,7 @@ ATankPawn::ATankPawn(){
 	// Создание объектов танка при спавне
 	//-----------------------------------------------------------------
 	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank body"));
-	BodyMesh->SetupAttachment(RootComponent);
+	RootComponent = BodyMesh;
 	//-----------------------------------------------------------------
 	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turret"));
 	TurretMesh->SetupAttachment(BodyMesh);
@@ -57,8 +56,7 @@ void ATankPawn::SetupCannon() {
 	params.Instigator = this;
 	params.Owner = this;
 	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, params);
-	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::KeepRelativeTransform); //     KeepRelativeTransform SnapToTargetNotIncludingScale
-
+	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale); //     KeepRelativeTransform SnapToTargetNotIncludingScale
 }
 
 //=====================================================================================================
