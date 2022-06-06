@@ -9,7 +9,7 @@ void ATankPawn::BeginPlay(){
 	Super::BeginPlay();
 	TankController = Cast<ATankPlayerController>(GetController());
 
-	SetupCannon();
+	SetupCannon(CannonClass);
 }
 
 //=====================================================================================================
@@ -43,21 +43,39 @@ ATankPawn::ATankPawn(){
 	CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Cannon setup point"));
 	CannonSetupPoint->AttachToComponent(TurretMesh,	FAttachmentTransformRules::KeepRelativeTransform);
 	//-----------------------------------------------------------------
+	BodyMesh->OnComponentBeginOverlap.AddDynamic(this, &ATankPawn::OnMeshOverlapBegin);
+	BodyMesh->SetCollisionObjectType(ECC_GameTraceChannel1);
+	BodyMesh->SetGenerateOverlapEvents(true);
 }
 
 //=====================================================================================================
 // Настройка пушки
 //=====================================================================================================
-void ATankPawn::SetupCannon() {
+void ATankPawn::SetupCannon(TSubclassOf<ACannon> CannonType) {
 
 	if (Cannon) { Cannon->Destroy(); }
-
+	if (CannonType) { CannonClass = CannonType; }
+	//if (!HaveCannons.IndexOfByKey(*CannonClass)) { 
+		HaveCannons.Push(*CannonClass);
+	//} // Если такой пушки не было добавим ее в массив
+	
 	FActorSpawnParameters params;
 	params.Instigator = this;
 	params.Owner = this;
 	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, params);
 	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale); //     KeepRelativeTransform SnapToTargetNotIncludingScale
 }
+
+void ATankPawn::ChangeWeapon() {
+	int IndexCannon = HaveCannons.Num(); // Находим элемент того что сейчас установлено
+	
+	
+	UE_LOG(LogTemp, Warning, TEXT("Index %d."), IndexCannon);
+	//if (HaveCannons.IsValidIndex(++IndexCannon)) { SetupCannon(HaveCannons[IndexCannon]); }
+	//else { SetupCannon(HaveCannons[0]); }
+}
+
+ACannon* ATankPawn::GetCannon(){ return Cannon;}
 
 //=====================================================================================================
 // Покадровое изменение (тик) для движения
@@ -121,3 +139,22 @@ void ATankPawn::RotateRight				 (float AxisValue)						{ TargetRightRotateValue 
 void ATankPawn::Fire() { if (Cannon) { Cannon->Fire(); } }
 void ATankPawn::FireSecond() { if (Cannon) { Cannon->FireSecond(); } }
 void ATankPawn::AutoFire() { if (Cannon) { Cannon->AutoFire(); } }
+
+//=====================================================================================================
+// Пересечение
+//=====================================================================================================
+void ATankPawn::OnMeshOverlapBegin(
+	UPrimitiveComponent* OverlappedComp,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult)
+{
+
+	UE_LOG(LogTemp, Warning, TEXT("TANK %s collided with %s. "), *GetName(), *OtherActor->GetName());
+
+	/*OtherActor->Destroy();
+	Destroy();*/
+
+}

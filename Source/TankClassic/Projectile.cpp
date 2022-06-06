@@ -10,12 +10,16 @@ AProjectile::AProjectile()
 	RootComponent = sceeneCpm;
 
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	ProjectileMesh->SetupAttachment(RootComponent);
-	ProjectileMesh->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
+	ProjectileMesh->SetupAttachment(RootComponent);	
 	ProjectileMesh->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnMeshOverlapBegin);
-	
+	ProjectileMesh->SetCollisionObjectType(ECC_GameTraceChannel1);
+	ProjectileMesh->SetGenerateOverlapEvents(true);
+}
 
-
+void AProjectile::BeginPlay()
+{
+	Super::BeginPlay();
+	//ProjectileMesh->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnMeshOverlapBegin);
 }
 
 //=====================================================================================================
@@ -46,6 +50,7 @@ void AProjectile::OnMeshOverlapBegin(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
+	
 	UE_LOG(LogTemp, Warning, TEXT("Projectile %s collided with %s. "), *GetName(), *OtherActor->GetName());
 
 	OtherActor->Destroy();

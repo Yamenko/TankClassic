@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/PrimitiveComponent.h"
 #include "TimerManager.h"
 #include "Projectile.generated.h"
 
@@ -12,6 +13,7 @@ class TANKCLASSIC_API AProjectile : public AActor
 	
 public:	
 	AProjectile();
+	virtual void BeginPlay() override;
 	void Start();
 
 protected:

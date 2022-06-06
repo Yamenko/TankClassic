@@ -2,8 +2,10 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "Cannon.h"
+#include "GameStructs.h"
 #include "GameFramework/Pawn.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/PrimitiveComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "TankPlayerController.h"
@@ -40,6 +42,10 @@ public:
 	UFUNCTION()	void Fire();
 	UFUNCTION()	void FireSecond();
 	UFUNCTION()	void AutoFire();
+	UFUNCTION() void SetupCannon(TSubclassOf<ACannon> CannonType);
+	UFUNCTION() void ChangeWeapon();
+	
+	UFUNCTION() ACannon* GetCannon();
 
 protected:
 	//-----------------------------------------------------------------
@@ -49,6 +55,14 @@ protected:
 
 	UPROPERTY()	class ATankPlayerController* TankController;
 	UPROPERTY() class ACannon* Cannon;
+
+	UFUNCTION()
+		void OnMeshOverlapBegin(class UPrimitiveComponent* OverlappedComp,
+			class AActor* OtherActor,
+			class UPrimitiveComponent* OtherComp,
+			int32 OtherBodyIndex,
+			bool bFromSweep,
+			const FHitResult& SweepResult);
 
 	//-----------------------------------------------------------------
 	// Меши и компоненты
@@ -66,7 +80,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
 	TSubclassOf<ACannon> CannonClass;
 
-	void SetupCannon();
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
+	TArray<TSubclassOf<ACannon>> HaveCannons;
+
 
 	//-----------------------------------------------------------------
 	// Переменные
@@ -87,6 +103,5 @@ private:
 	float TargetRightAxisValue;
 	float TargetRightRotateValue;
 	float CurrentRightAxisValue;
-
 };
 //=====================================================================================================

@@ -1,6 +1,7 @@
 //=====================================================================================================
 #include "Cannon.h"
 
+
 //#include "TankPlayerController.h"
 
 //DECLARE_LOG_CATEGORY_EXTERN(LogTMP_Tank, All, All);
@@ -29,33 +30,41 @@ ACannon::ACannon()
 // Выстрел
 //=====================================================================================================
 void ACannon::Fire(){
-	if (!ReadyToFire)	{ return; }
-	if (Ammo <= 0) { return; }
+	if (!ReadyToFire || AmmoCount <= 0)	{ return; }
 
 	ReadyToFire = false;
 
 	UE_LOG(LogTemp, Warning, TEXT("PIU"));
 
-	if (Type == ECannonType::FireProjectile) {
-		//-----------------------------------------------------------------
-		// Выводим на экран для отладки
-		//-----------------------------------------------------------------
-		GEngine->AddOnScreenDebugMessage(1, 3, FColor::Green, "Fire - projectile");
-		//-----------------------------------------------------------------
-		// Запускаем снаряд
-		//-----------------------------------------------------------------
-		SpawnProjectile();
+	if (Type == ECannonType::FireProjectile){
+		GEngine->AddOnScreenDebugMessage(10, 1, FColor::Green, "Fire - projectile");
+		FTransform projectileTransform(ProjectileSpawnPoint->GetComponentRotation(), ProjectileSpawnPoint->GetComponentLocation(), FVector(1));
+		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentLocation(), ProjectileSpawnPoint->GetComponentRotation());
+		
+		if (projectile)	{ projectile->Start();}
 	}
 	else {
-		GEngine->AddOnScreenDebugMessage(1, 3, FColor::Green, "Fire - trace");
+		GEngine->AddOnScreenDebugMessage(10, 1, FColor::Green, "Fire - trace");
+		FHitResult hitResult;
+		FCollisionQueryParams traceParams =	FCollisionQueryParams(FName(TEXT("FireTrace")), true, this);
+		traceParams.bTraceComplex = true;
+		traceParams.bReturnPhysicalMaterial = false;
+		FVector start = ProjectileSpawnPoint->GetComponentLocation();
+		FVector end = ProjectileSpawnPoint->GetForwardVector() * FireRange + start;
+		
+		if (GetWorld()->LineTraceSingleByChannel(hitResult, start, end,	ECollisionChannel::ECC_Visibility, traceParams)){
+			DrawDebugLine(GetWorld(), start, hitResult.Location, FColor::Red, false, 0.5f, 0, 5);
+		
+			if (hitResult.Actor.Get()) { hitResult.Actor.Get()->Destroy(); }
+		}
+		else { DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 0.5f, 0, 5);}
 	}
 
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this,	&ACannon::Reload, 1 / FireRate, false);
 }
 
 void ACannon::FireSecond(){
-	if (!ReadyToFire) { return; }
-	if (Ammo <= 0) { return; }
+	if (!ReadyToFire || AmmoCount <= 0) { return; }
 	
 	ReadyToFire = false;
 	GEngine->AddOnScreenDebugMessage(1, 3, FColor::Red, "Fire - trace");
@@ -64,29 +73,26 @@ void ACannon::FireSecond(){
 
 void ACannon::AutoFire()
 {
-	if (!ReadyToFire) { return; }
-	if (Ammo <= 0) { return; }
+	if (!ReadyToFire || AmmoCount <= 0) { return; }
+
+	ReadyToFire = false;
 
 	GetWorld()->GetTimerManager().SetTimer(AutoFireTimerHandle, this, &ACannon::SpawnProjectile, 1 / (FireRate * ShootInFireRate), true);
 	GEngine->AddOnScreenDebugMessage(1, 3, FColor::Red, "Auto Fire!");
-
-	if (CountShoot > ShootInFireRate) {
-		GetWorld()->GetTimerManager().ClearTimer(AutoFireTimerHandle);
-		UE_LOG(LogTemp, Warning, TEXT("WE ARE HERE!!"));
-		Reload();
-	}
-
+	Reload();
 }
 
 //=====================================================================================================
 // Готовность к стрельбе
 //=====================================================================================================
-void ACannon::SpawnProjectile(){
-	
-	CountShoot++;
-	UE_LOG(LogTemp, Warning, TEXT("CountShoot: %d"), CountShoot);
+void ACannon::SpawnProjectile()
+{
 	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentLocation(), ProjectileSpawnPoint->GetComponentRotation());
-	if (projectile) { projectile->Start(); }
+	if (projectile) { 
+		projectile->Start(); 
+		CountProjectileAutoFire++;
+	}
+	if (CountProjectileAutoFire >= 3) { GetWorld()->GetTimerManager().ClearTimer(AutoFireTimerHandle); }
 }
 
 //=====================================================================================================
@@ -99,11 +105,22 @@ bool ACannon::IsReadyToFire() {	return ReadyToFire; }
 //=====================================================================================================
 void ACannon::Reload()
 {	
-	UE_LOG(LogTemp, Warning, TEXT("Ammo: %d"), Ammo);
+	UE_LOG(LogTemp, Warning, TEXT("Ammo: %d"), AmmoCount);
+	CountProjectileAutoFire = 0;
 	ReadyToFire = true;
-	CountShoot = 0;
-	Ammo--;
+	AmmoCount--;
 }
+
+//=====================================================================================================
+// Получение патронов
+//=====================================================================================================
+void ACannon::SetAmmo(int32 CountTakeAmmo){	AmmoCount += CountTakeAmmo;}
+
+//=====================================================================================================
+// Возвращаем тип пушки
+//=====================================================================================================
+ECannonType ACannon::GetCannonType() {	return ACannon::Type; }
+//ECannonType ACannon::SetCannonType(ECannonType NewType) { ACannon::Type = NewType; }
 
 //=====================================================================================================
 // В начале игры делаем перезарядку
@@ -111,5 +128,5 @@ void ACannon::Reload()
 void ACannon::BeginPlay(){
 	Super::BeginPlay();
 	Reload();
-	Ammo = 10;
+	AmmoCount = 10;
 }

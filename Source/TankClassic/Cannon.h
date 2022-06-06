@@ -11,6 +11,7 @@
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"
 #include "Engine/Engine.h"
+#include <Runtime/Engine/Public/DrawDebugHelpers.h>
 #include "Cannon.generated.h"
 //=====================================================================================================
 //=====================================================================================================
@@ -33,8 +34,10 @@ public:
 	void AutoFire();
 	bool IsReadyToFire();
 	void Reload();
+	void SetAmmo(int32 CountTakeAmmo);
 
-	//virtual void Tick(float DeltaTime) override;
+	ECannonType GetCannonType();
+	//ECannonType SetCannonType(ECannonType NewType);
 
 	FTimerHandle ReloadTimerHandle;
 	FTimerHandle AutoFireTimerHandle;
@@ -45,8 +48,6 @@ protected:
 	void SpawnProjectile();
 
 	UPROPERTY()	class ATankPawn* TankPawn;
-
-
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UStaticMeshComponent * CannonMesh;
@@ -64,11 +65,9 @@ protected:
 	ECannonType Type = ECannonType::FireProjectile;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
 	TSubclassOf<AProjectile> ProjectileClass;
-
-
-
-private:
-	int Ammo;
-	int CountShoot = 0;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
+	int32 AmmoCount;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
+	int32 CountProjectileAutoFire;
 };
 //=====================================================================================================

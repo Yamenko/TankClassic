@@ -25,6 +25,7 @@ protected:
 	void Fire();
 	void FireSecond();
 	void AutoFire();
+	void ChangeWeapon();
 
 public:
 	//-----------------------------------------------------------------
