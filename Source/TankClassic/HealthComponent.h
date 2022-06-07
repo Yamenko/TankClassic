@@ -1,28 +1,26 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
-
 #include "CoreMinimal.h"
+#include "GameStructs.h"
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
-
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class TANKCLASSIC_API UHealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
-
-public:	
-	// Sets default values for this component's properties
-	UHealthComponent();
-
+	DECLARE_EVENT(UHealthComponent, FOnDie)
+	DECLARE_EVENT_OneParam(UHealthComponent, FOnHealthChanged, float)
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-		
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health values")
+	float MaxHealth = 10;
+	UPROPERTY()
+	float CurrentHealth;
+public:
+	FOnDie OnDie;
+	FOnHealthChanged OnDamaged;
+	UHealthComponent();
+	void TakeDamage(float DamageData);
+	float GetHealth() const;
+	float GetHealthState() const;
+	void AddHealth(float AddiditionalHealthValue);
 };

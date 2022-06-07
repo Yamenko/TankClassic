@@ -8,6 +8,8 @@
 #include "Components/ArrowComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Cannon.h"
+#include "HealthComponent.h"
+#include "Components/BoxComponent.h"
 #include "TankPawn.generated.h"
 //=====================================================================================================
 //=====================================================================================================
@@ -46,8 +48,13 @@ public:
 	UFUNCTION() void ChangeWeapon();
 
 	UFUNCTION() ACannon* GetCannon();
+	UFUNCTION()	void TakeDamage(FDamageData DamageData);
+
 
 protected:
+
+	UFUNCTION()	void Die();
+	UFUNCTION()	void DamageTaked(float DamageValue);
 
 	UPROPERTY()	class ATankPlayerController* TankController;
 	//UPROPERTY() class ACannon* Cannon;
@@ -77,6 +84,15 @@ protected:
 	TSubclassOf<ACannon> CannonClass;
 	UPROPERTY()
 	ACannon* Cannon;
+
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UHealthComponent* HealthComponent;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UBoxComponent* HitCollider;
+
+
+
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
 		TArray<TSubclassOf<ACannon>> HaveCannons;

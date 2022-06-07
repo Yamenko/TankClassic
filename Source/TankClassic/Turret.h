@@ -4,6 +4,7 @@
 #include "TankPlayerController.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+#include "HealthComponent.h"
 #include "Turret.generated.h"
 
 
@@ -15,6 +16,10 @@ public:
 	ATurret();
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
+
+	UFUNCTION()	void Die();
+	UFUNCTION()	void DamageTaked(float DamageValue);
+
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UStaticMeshComponent* BodyMesh;
@@ -38,6 +43,10 @@ protected:
 	float TargetingRate = 0.005f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Targeting")
 	float Accurency = 10;
+	
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UHealthComponent* HealthComponent;
+
 	const FString BodyMeshPath = "StaticMesh'/Game/CSC/Meshes/SM_CSC_Tower1.SM_CSC_Tower1'";
 	const FString TurretMeshPath = "StaticMesh'/Game/CSC/Meshes/SM_CSC_Gun1.SM_CSC_Gun1'";
 

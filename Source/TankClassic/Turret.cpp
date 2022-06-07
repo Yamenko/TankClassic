@@ -15,6 +15,11 @@ ATurret::ATurret(){
 	UStaticMesh* bodyMeshTemp = LoadObject<UStaticMesh>(this, *BodyMeshPath);
 	if (bodyMeshTemp)
 		BodyMesh->SetStaticMesh(bodyMeshTemp);
+
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health	component"));
+	HealthComponent->OnDie.AddUObject(this, &ATurret::Die);
+	HealthComponent->OnDamaged.AddUObject(this, &ATurret::DamageTaked);
+
 }
 
 void ATurret::BeginPlay()
@@ -29,10 +34,18 @@ void ATurret::BeginPlay()
 	GetWorld()->GetTimerManager().SetTimer(_targetingTimerHandle, this, &ATurret::Targeting, TargetingRate, true, TargetingRate);
 }
 
-void ATurret::Destroyed()
-{
-	if (Cannon) { Cannon->Destroy(); }
-}
+
+
+void ATurret::DamageTaked(float DamageData){ HealthComponent->TakeDamage(DamageData); }
+void ATurret::Die(){ Destroy();}
+void ATurret::Destroyed() { if (Cannon) { Cannon->Destroy(); } }
+
+//void ATurret::DamageTaked(float DamageValue)
+//{
+//	UE_LOG(LogTemp, Warning, TEXT("Turret %s taked damage:%f Health:%f"), *GetName(),
+//		DamageValue, HealthComponent->GetHealth());
+//}
+
 
 void ATurret::Targeting()
 {
