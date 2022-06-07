@@ -68,8 +68,7 @@ void ATankPawn::SetupCannon(TSubclassOf<ACannon> CannonType) {
 
 void ATankPawn::ChangeWeapon() {
 	int IndexCannon = HaveCannons.Num(); // Находим элемент того что сейчас установлено
-	
-	
+
 	UE_LOG(LogTemp, Warning, TEXT("Index %d."), IndexCannon);
 	//if (HaveCannons.IsValidIndex(++IndexCannon)) { SetupCannon(HaveCannons[IndexCannon]); }
 	//else { SetupCannon(HaveCannons[0]); }
