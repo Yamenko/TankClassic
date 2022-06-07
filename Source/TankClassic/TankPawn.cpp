@@ -1,16 +1,5 @@
-//=====================================================================================================
 #include "TankPawn.h"
 //=====================================================================================================
-
-//=====================================================================================================
-// Действия на старте
-//=====================================================================================================
-void ATankPawn::BeginPlay(){
-	Super::BeginPlay();
-	TankController = Cast<ATankPlayerController>(GetController());
-
-	SetupCannon(CannonClass);
-}
 
 //=====================================================================================================
 // Конструктор класса ТАНК
@@ -26,10 +15,17 @@ ATankPawn::ATankPawn(){
 	//-----------------------------------------------------------------
 	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank body"));
 	RootComponent = BodyMesh;
-	//-----------------------------------------------------------------
+	////-----------------------------------------------------------------
 	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turret"));
 	TurretMesh->SetupAttachment(BodyMesh);
 	//-----------------------------------------------------------------
+	CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Cannon setup point"));
+	CannonSetupPoint->AttachToComponent(TurretMesh, FAttachmentTransformRules::KeepRelativeTransform);
+	////-----------------------------------------------------------------
+	BodyMesh->OnComponentBeginOverlap.AddDynamic(this, &ATankPawn::OnMeshOverlapBegin);
+	BodyMesh->SetCollisionObjectType(ECC_GameTraceChannel1);
+	BodyMesh->SetGenerateOverlapEvents(true);
+	////-----------------------------------------------------------------
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(BodyMesh);
 	SpringArm->bDoCollisionTest = false;
@@ -40,12 +36,17 @@ ATankPawn::ATankPawn(){
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 	//-----------------------------------------------------------------
-	CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Cannon setup point"));
-	CannonSetupPoint->AttachToComponent(TurretMesh,	FAttachmentTransformRules::KeepRelativeTransform);
-	//-----------------------------------------------------------------
-	BodyMesh->OnComponentBeginOverlap.AddDynamic(this, &ATankPawn::OnMeshOverlapBegin);
-	BodyMesh->SetCollisionObjectType(ECC_GameTraceChannel1);
-	BodyMesh->SetGenerateOverlapEvents(true);
+
+}
+
+//=====================================================================================================
+// Действия на старте
+//=====================================================================================================
+void ATankPawn::BeginPlay() {
+	Super::BeginPlay();
+	TankController = Cast<ATankPlayerController>(GetController());
+
+	SetupCannon(CannonClass);
 }
 
 //=====================================================================================================

@@ -1,15 +1,14 @@
 #include "Turret.h"
 
-ATurret::ATurret()
-{
-	//BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turret body"));
-	//RootComponent = BodyMesh;
-	//TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turretturret"));
-	//TurretMesh->AttachToComponent(BodyMesh, FAttachmentTransformRules::KeepRelativeTransform);
-	//CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Cannon setup point"));
-	//CannonSetupPoint->AttachToComponent(TurretMesh, FAttachmentTransformRules::KeepRelativeTransform);
-	//HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Hit collider"));
-	//HitCollider->SetupAttachment(TurretMesh);
+ATurret::ATurret(){
+	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turret body"));
+	RootComponent = BodyMesh;
+	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turretturret"));
+	TurretMesh->AttachToComponent(BodyMesh, FAttachmentTransformRules::KeepRelativeTransform);
+	CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Cannon setup point"));
+	CannonSetupPoint->AttachToComponent(TurretMesh, FAttachmentTransformRules::KeepRelativeTransform);
+	HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Hit collider"));
+	HitCollider->SetupAttachment(TurretMesh);
 	UStaticMesh * turretMeshTemp = LoadObject<UStaticMesh>(this, *TurretMeshPath);
 	if (turretMeshTemp)
 		TurretMesh->SetStaticMesh(turretMeshTemp);

@@ -1,35 +1,35 @@
-//=====================================================================================================
 #pragma once
 #include "CoreMinimal.h"
-#include "Cannon.h"
 #include "GameStructs.h"
 #include "GameFramework/Pawn.h"
-#include "Components/StaticMeshComponent.h"
-#include "Components/PrimitiveComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "TankPlayerController.h"
+#include "Components/ArrowComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Cannon.h"
 #include "TankPawn.generated.h"
 //=====================================================================================================
 //=====================================================================================================
 
-class UStaticMeshComponent;
-class USpringArmComponent;
-class UCameraComponent;
-class ATankPlayerController;
-class ACannon;
+//class UStaticMeshComponent;
+//class USpringArmComponent;
+//class UCameraComponent;
+//class ATankPlayerController;
+//class ACannon;
 
 //=====================================================================================================
 //=====================================================================================================
+
 UCLASS()
-class TANKCLASSIC_API ATankPawn : public APawn
-{ 
+class TANKCLASSIC_API ATankPawn :  public APawn
+{
 	GENERATED_BODY()
 public:
 	ATankPawn();
 
 	virtual void Tick(float DeltaTime) override;
+	virtual void BeginPlay() override;
 
 	//-----------------------------------------------------------------
 	// ”правление
@@ -44,17 +44,13 @@ public:
 	UFUNCTION()	void AutoFire();
 	UFUNCTION() void SetupCannon(TSubclassOf<ACannon> CannonType);
 	UFUNCTION() void ChangeWeapon();
-	
+
 	UFUNCTION() ACannon* GetCannon();
 
 protected:
-	//-----------------------------------------------------------------
-	// Called when the game starts or when spawned
-	//-----------------------------------------------------------------
-	virtual void BeginPlay() override;
 
 	UPROPERTY()	class ATankPlayerController* TankController;
-	UPROPERTY() class ACannon* Cannon;
+	//UPROPERTY() class ACannon* Cannon;
 
 	UFUNCTION()
 		void OnMeshOverlapBegin(class UPrimitiveComponent* OverlappedComp,
@@ -72,16 +68,18 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UStaticMeshComponent* TurretMesh;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	USpringArmComponent * SpringArm;
+	USpringArmComponent* SpringArm;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	UCameraComponent * Camera;
+	UCameraComponent* Camera;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UArrowComponent* CannonSetupPoint;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
 	TSubclassOf<ACannon> CannonClass;
+	UPROPERTY()
+	ACannon* Cannon;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
-	TArray<TSubclassOf<ACannon>> HaveCannons;
+		TArray<TSubclassOf<ACannon>> HaveCannons;
 
 
 	//-----------------------------------------------------------------
