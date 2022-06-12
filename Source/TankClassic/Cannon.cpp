@@ -1,9 +1,6 @@
 //=====================================================================================================
 #include "Cannon.h"
 
-
-//#include "TankPlayerController.h"
-
 //DECLARE_LOG_CATEGORY_EXTERN(LogTMP_Tank, All, All);
 //DEFINE_LOG_CATEGORY(LogTMP_Tank);
 
@@ -12,7 +9,6 @@
 //=====================================================================================================
 ACannon::ACannon()
 {
-
 	PrimaryActorTick.bCanEverTick = false;
 	USceneComponent* sceeneCpm = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = sceeneCpm;
@@ -34,8 +30,6 @@ void ACannon::Fire(){
 
 	ReadyToFire = false;
 
-	UE_LOG(LogTemp, Warning, TEXT("PIU"));
-
 	if (Type == ECannonType::FireProjectile){
 		GEngine->AddOnScreenDebugMessage(10, 1, FColor::Green, "Fire - projectile");
 		FTransform projectileTransform(ProjectileSpawnPoint->GetComponentRotation(), ProjectileSpawnPoint->GetComponentLocation(), FVector(1));
@@ -54,8 +48,16 @@ void ACannon::Fire(){
 		
 		if (GetWorld()->LineTraceSingleByChannel(hitResult, start, end,	ECollisionChannel::ECC_Visibility, traceParams)){
 			DrawDebugLine(GetWorld(), start, hitResult.Location, FColor::Red, false, 0.5f, 0, 5);
-		
-			if (hitResult.Actor.Get()) { hitResult.Actor.Get()->Destroy(); }
+			
+			
+			IDamageTaker* damageTakerActor = Cast<IDamageTaker>(hitResult.Actor.Get());
+			if (damageTakerActor) {
+				FDamageData damageData;
+				damageData.DamageValue = FireDamage;
+				damageData.DamageMaker = this;
+				damageTakerActor->TakeDamage(damageData);
+				UE_LOG(LogTemp, Warning, TEXT("damage by trace."));
+			}
 		}
 		else { DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 0.5f, 0, 5);}
 	}
@@ -63,6 +65,8 @@ void ACannon::Fire(){
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this,	&ACannon::Reload, 1 / FireRate, false);
 }
 
+//=====================================================================================================
+//=====================================================================================================
 void ACannon::FireSecond(){
 	if (!ReadyToFire || AmmoCount <= 0) { return; }
 	
@@ -71,6 +75,8 @@ void ACannon::FireSecond(){
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this, &ACannon::Reload, 1 / FireRate, false);
 }
 
+//=====================================================================================================
+//=====================================================================================================
 void ACannon::AutoFire()
 {
 	if (!ReadyToFire || AmmoCount <= 0) { return; }

@@ -18,12 +18,10 @@ struct FDamageData
 {
 	GENERATED_BODY()
 
-	UPROPERTY()
-	float DamageValue;
-	UPROPERTY()
-	AActor* Instigator;
-	UPROPERTY()
-	AActor* DamageMaker;
+	UPROPERTY()	float DamageValue;
+	UPROPERTY()	AActor* Instigator;
+	UPROPERTY()	AActor* DamageMaker;
+	UPROPERTY() int32 Score;
 };
 
 

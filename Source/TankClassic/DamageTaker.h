@@ -15,4 +15,5 @@ class TANKCLASSIC_API IDamageTaker
 	GENERATED_BODY()
 public:
 	virtual void TakeDamage(FDamageData DamageData) = 0;
+	//virtual void PlayerTakeScore(FDamageData DamageData) = 0;
 };

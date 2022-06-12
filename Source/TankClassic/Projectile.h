@@ -4,6 +4,10 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/PrimitiveComponent.h"
 #include "TimerManager.h"
+#include "DamageTaker.h"
+#include "Turret.h"
+#include "Cannon.h"
+#include "TankPawn.h"
 #include "Projectile.generated.h"
 
 UCLASS()

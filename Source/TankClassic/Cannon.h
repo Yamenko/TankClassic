@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "GameStructs.h"
 #include "Projectile.h"
+#include "GameStructs.h"
 #include "Logging/LogMacros.h"
 #include "Components/ArrowComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -12,11 +13,12 @@
 #include "TimerManager.h"
 #include "Engine/Engine.h"
 #include <Runtime/Engine/Public/DrawDebugHelpers.h>
+#include "Templates/SubclassOf.h"
 #include "Cannon.generated.h"
 //=====================================================================================================
 //=====================================================================================================
 //class UArrowComponent;
-
+class AProjectile;
 
 //=====================================================================================================
 //=====================================================================================================
@@ -37,7 +39,7 @@ public:
 	void SetAmmo(int32 CountTakeAmmo);
 
 	ECannonType GetCannonType();
-	//ECannonType SetCannonType(ECannonType NewType);
+	ECannonType SetCannonType(ECannonType NewType);
 
 	FTimerHandle ReloadTimerHandle;
 	FTimerHandle AutoFireTimerHandle;

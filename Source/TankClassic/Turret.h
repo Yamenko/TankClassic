@@ -5,11 +5,13 @@
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
 #include "HealthComponent.h"
+#include "GameStructs.h"
+#include "TankPawn.h"
 #include "Turret.generated.h"
 
 
 UCLASS()
-class TANKCLASSIC_API ATurret : public AActor
+class TANKCLASSIC_API ATurret : public AActor, public IDamageTaker
 {
 	GENERATED_BODY()
 public:
@@ -19,6 +21,9 @@ public:
 
 	UFUNCTION()	void Die();
 	UFUNCTION()	void DamageTaked(float DamageValue);
+	UFUNCTION()	void TakeDamage(FDamageData DamageData);
+	//UFUNCTION()	void PlayerTakeScore(FDamageData DamageData);
+	UFUNCTION()	int32 GetScoreOnDie();
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
@@ -29,12 +34,11 @@ protected:
 	UArrowComponent* CannonSetupPoint;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UBoxComponent* HitCollider;
+	UPROPERTY()	class ACannon* Cannon;
+	UPROPERTY()	class APawn* PlayerPawn;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
 	TSubclassOf<ACannon> CannonClass;
-	UPROPERTY()
-	ACannon* Cannon;
-	UPROPERTY()
-	APawn* PlayerPawn;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Targeting")
 	float TargetingRange = 1000;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Targeting")
@@ -43,9 +47,11 @@ protected:
 	float TargetingRate = 0.005f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Targeting")
 	float Accurency = 10;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	int32 Score = 10;
 	
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	UHealthComponent* HealthComponent;
+	class UHealthComponent* HealthComponent;
 
 	const FString BodyMeshPath = "StaticMesh'/Game/CSC/Meshes/SM_CSC_Tower1.SM_CSC_Tower1'";
 	const FString TurretMeshPath = "StaticMesh'/Game/CSC/Meshes/SM_CSC_Gun1.SM_CSC_Gun1'";

@@ -49,6 +49,7 @@ public:
 
 	UFUNCTION() ACannon* GetCannon();
 	UFUNCTION()	void TakeDamage(FDamageData DamageData);
+	UFUNCTION()	void SetScore(int32 TakeScore);
 
 
 protected:
@@ -57,10 +58,10 @@ protected:
 	UFUNCTION()	void DamageTaked(float DamageValue);
 
 	UPROPERTY()	class ATankPlayerController* TankController;
-	//UPROPERTY() class ACannon* Cannon;
+	UPROPERTY() class ACannon* Cannon;
 
 	UFUNCTION()
-		void OnMeshOverlapBegin(class UPrimitiveComponent* OverlappedComp,
+	void OnMeshOverlapBegin(class UPrimitiveComponent* OverlappedComp,
 			class AActor* OtherActor,
 			class UPrimitiveComponent* OtherComp,
 			int32 OtherBodyIndex,
@@ -82,20 +83,15 @@ protected:
 	UArrowComponent* CannonSetupPoint;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
 	TSubclassOf<ACannon> CannonClass;
-	UPROPERTY()
-	ACannon* Cannon;
 
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	UHealthComponent* HealthComponent;
+	class UHealthComponent* HealthComponent;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UBoxComponent* HitCollider;
 
-
-
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
-		TArray<TSubclassOf<ACannon>> HaveCannons;
+	TArray<TSubclassOf<ACannon>> HaveCannons;
 
 
 	//-----------------------------------------------------------------
@@ -111,6 +107,8 @@ protected:
 	float InterpolarKeyMove = 0.01f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret	 | Speed")
 	float TurretRotationInterpolationKey = 0.5f;
+
+	int32 Score;
 
 private:
 	float TargetForwardAxisValue;

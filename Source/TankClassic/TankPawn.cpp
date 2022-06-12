@@ -51,7 +51,7 @@ ATankPawn::ATankPawn(){
 void ATankPawn::BeginPlay() {
 	Super::BeginPlay();
 	TankController = Cast<ATankPlayerController>(GetController());
-
+	//Score = 0;
 	SetupCannon(CannonClass);
 }
 
@@ -166,6 +166,12 @@ void ATankPawn::OnMeshOverlapBegin(
 }
 
 void ATankPawn::TakeDamage(FDamageData DamageData){	HealthComponent->TakeDamage(DamageData);}
+
+void ATankPawn::SetScore(int32 TakeScore) {	
+	Score += TakeScore;
+	UE_LOG(LogTemp, Warning, TEXT("TANK take scores %d, New score: %d."), TakeScore, Score);
+}
+
 void ATankPawn::Die(){ Destroy();}
 void ATankPawn::DamageTaked(float DamageValue)
 {
