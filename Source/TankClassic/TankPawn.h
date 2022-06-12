@@ -24,7 +24,7 @@
 //=====================================================================================================
 
 UCLASS()
-class TANKCLASSIC_API ATankPawn :  public APawn
+class TANKCLASSIC_API ATankPawn :  public APawn, public IDamageTaker
 {
 	GENERATED_BODY()
 public:
@@ -51,6 +51,11 @@ public:
 	UFUNCTION()	void TakeDamage(FDamageData DamageData);
 	UFUNCTION()	void SetScore(int32 TakeScore);
 
+	UFUNCTION()	TArray<FVector> GetPatrollingPoints() { return PatrollingPoints; };
+	UFUNCTION()	float GetMovementAccurency() { return MovementAccurency; };
+
+	UFUNCTION()	FVector GetTurretForwardVector();
+	UFUNCTION()	void RotateTurretTo(FVector TargetPosition);
 
 protected:
 
@@ -92,6 +97,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
 	TArray<TSubclassOf<ACannon>> HaveCannons;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params|Patrol points" , Meta = (MakeEditWidget = true))
+	TArray<FVector> PatrollingPoints;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params | Accurency")
+	float MovementAccurency = 50;
+
 
 
 	//-----------------------------------------------------------------

@@ -125,6 +125,34 @@ void ATankPawn::Tick(float DeltaTime){
 	}
 
 	//-----------------------------------------------------------------
+	// Блок AI
+	//-----------------------------------------------------------------
+	// Движение
+	//-----------------------------------------------------------------
+	FVector currentLocation = GetActorLocation();
+	FVector forwardVector = GetActorForwardVector();
+	FVector movePosition = currentLocation + forwardVector * MoveSpeed * TargetForwardAxisValue * DeltaTime;
+	SetActorLocation(movePosition, true);
+	//-----------------------------------------------------------------
+	// Повороты Танка
+	//-----------------------------------------------------------------
+	CurrentRightAxisValue = FMath::Lerp(CurrentRightAxisValue, TargetRightAxisValue, InterpolarKeyRotate);
+	float yawRotation = RotationSpeed * CurrentRightAxisValue * DeltaTime;
+	FRotator currentRotation = GetActorRotation();
+	yawRotation = currentRotation.Yaw + yawRotation;
+	FRotator newRotation = FRotator(0, yawRotation, 0);
+	SetActorRotation(newRotation);
+	//-----------------------------------------------------------------
+	// Поворот Башни
+	//-----------------------------------------------------------------
+	if (TankController)
+	{
+		FVector mousePos = TankController->GetMousePos();
+		RotateTurretTo(mousePos);
+	}
+
+
+	//-----------------------------------------------------------------
 	// Логи (вывод сообщений)
 	//-----------------------------------------------------------------
 	// UE_LOG(LogTMP_Tank, Warning, TEXT("Position tank: x = %00.00f, y = %00.00f, z = %00.00f"), NewPosition.X, NewPosition.Y, NewPosition.Z);
@@ -160,20 +188,44 @@ void ATankPawn::OnMeshOverlapBegin(
 
 	UE_LOG(LogTemp, Warning, TEXT("TANK %s collided with %s. "), *GetName(), *OtherActor->GetName());
 
-	/*OtherActor->Destroy();
-	Destroy();*/
+	//OtherActor->Destroy();
+	//Destroy();
 
 }
-
+//=====================================================================================================
+//=====================================================================================================
 void ATankPawn::TakeDamage(FDamageData DamageData){	HealthComponent->TakeDamage(DamageData);}
 
+//=====================================================================================================
+//=====================================================================================================
 void ATankPawn::SetScore(int32 TakeScore) {	
 	Score += TakeScore;
 	UE_LOG(LogTemp, Warning, TEXT("TANK take scores %d, New score: %d."), TakeScore, Score);
 }
 
+//=====================================================================================================
+//=====================================================================================================
 void ATankPawn::Die(){ Destroy();}
+
+//=====================================================================================================
+//=====================================================================================================
 void ATankPawn::DamageTaked(float DamageValue)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Tank %s taked damage:%f Health:%f"), *GetName(),	DamageValue, HealthComponent->GetHealth());
+}
+
+//=====================================================================================================
+//=====================================================================================================
+
+FVector ATankPawn::GetTurretForwardVector(){ return TurretMesh->GetForwardVector();}
+
+//=====================================================================================================
+//=====================================================================================================
+void ATankPawn::RotateTurretTo(FVector TargetPosition)
+{
+	FRotator targetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetPosition);
+	FRotator currRotation = TurretMesh->GetComponentRotation();
+	targetRotation.Pitch = currRotation.Pitch;
+	targetRotation.Roll = currRotation.Roll;
+	TurretMesh->SetWorldRotation(FMath::Lerp(currRotation, targetRotation, TurretRotationInterpolationKey));
 }
