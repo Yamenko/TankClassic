@@ -57,6 +57,8 @@ public:
 	UFUNCTION()	FVector GetTurretForwardVector();
 	UFUNCTION()	void RotateTurretTo(FVector TargetPosition);
 
+	FVector GetEyesPosition();
+
 protected:
 
 	UFUNCTION()	void Die();

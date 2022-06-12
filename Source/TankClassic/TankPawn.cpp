@@ -229,3 +229,7 @@ void ATankPawn::RotateTurretTo(FVector TargetPosition)
 	targetRotation.Roll = currRotation.Roll;
 	TurretMesh->SetWorldRotation(FMath::Lerp(currRotation, targetRotation, TurretRotationInterpolationKey));
 }
+
+//=====================================================================================================
+//=====================================================================================================
+FVector ATankPawn::GetEyesPosition(){ return CannonSetupPoint->GetComponentLocation(); }
