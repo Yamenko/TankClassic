@@ -5,16 +5,21 @@
 #include "GameStructs.h"
 #include "Projectile.h"
 #include "GameStructs.h"
+#include "TimerManager.h"
+#include "Engine/Engine.h"
 #include "Logging/LogMacros.h"
 #include "Components/ArrowComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SceneComponent.h"
+#include "Components/AudioComponent.h"
 #include "GameFramework/Actor.h"
-#include "TimerManager.h"
-#include "Engine/Engine.h"
-#include <Runtime/Engine/Public/DrawDebugHelpers.h>
+#include "GameFramework/ForceFeedbackEffect.h"
 #include "Templates/SubclassOf.h"
+#include <Runtime/Engine/Public/DrawDebugHelpers.h>
+#include "Camera/CameraModifier_CameraShake.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Cannon.generated.h"
+
 //=====================================================================================================
 //=====================================================================================================
 //class UArrowComponent;
@@ -71,5 +76,10 @@ protected:
 	int32 AmmoCount;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
 	int32 CountProjectileAutoFire;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UParticleSystemComponent* ShootEffect;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UAudioComponent* AudioEffect;
 };
 //=====================================================================================================

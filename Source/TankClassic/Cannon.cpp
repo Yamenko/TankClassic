@@ -18,6 +18,12 @@ ACannon::ACannon()
 
 	ProjectileSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Spawn point"));
 	ProjectileSpawnPoint->SetupAttachment(CannonMesh);
+
+	ShootEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Shoot effect"));
+	ShootEffect->SetupAttachment(ProjectileSpawnPoint);
+
+	AudioEffect = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio effect"));
+	AudioEffect->SetupAttachment(CannonMesh);
 }
 
 //=====================================================================================================
@@ -29,6 +35,10 @@ void ACannon::Fire(){
 	if (!ReadyToFire || AmmoCount <= 0)	{ return; }
 
 	ReadyToFire = false;
+
+	ShootEffect->ActivateSystem();
+	AudioEffect->Play();
+
 
 	if (Type == ECannonType::FireProjectile){
 		GEngine->AddOnScreenDebugMessage(10, 1, FColor::Green, "Fire - projectile");
