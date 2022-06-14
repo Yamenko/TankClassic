@@ -44,7 +44,7 @@ public:
 	void SetAmmo(int32 CountTakeAmmo);
 
 	ECannonType GetCannonType();
-	ECannonType SetCannonType(ECannonType NewType);
+	//ECannonType SetCannonType(ECannonType NewType);
 
 	FTimerHandle ReloadTimerHandle;
 	FTimerHandle AutoFireTimerHandle;

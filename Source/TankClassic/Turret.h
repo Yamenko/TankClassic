@@ -24,6 +24,8 @@ public:
 	UFUNCTION()	void TakeDamage(FDamageData DamageData);
 	//UFUNCTION()	void PlayerTakeScore(FDamageData DamageData);
 	UFUNCTION()	int32 GetScoreOnDie();
+	UFUNCTION() FVector GetEyesPosition();
+	UFUNCTION() bool IsPlayerSeen();
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
