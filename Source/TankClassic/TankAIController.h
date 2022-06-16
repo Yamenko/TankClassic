@@ -42,4 +42,5 @@ protected:
 	bool IsPlayerSeen();
 	bool CanFire();
 	void Fire();
+	void Initialize();
 };

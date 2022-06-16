@@ -1,15 +1,16 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "GameStructs.h"
+#include "Cannon.h"
+#include "HealthComponent.h"
+#include "TankPlayerController.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
-#include "TankPlayerController.h"
+#include "Components/BoxComponent.h"
 #include "Components/ArrowComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Cannon.h"
-#include "HealthComponent.h"
-#include "Components/BoxComponent.h"
+#include "Engine/TargetPoint.h"
 #include "TankPawn.generated.h"
 //=====================================================================================================
 //=====================================================================================================
@@ -51,13 +52,19 @@ public:
 	UFUNCTION()	void TakeDamage(FDamageData DamageData);
 	UFUNCTION()	void SetScore(int32 TakeScore);
 
-	UFUNCTION()	TArray<FVector> GetPatrollingPoints() { return PatrollingPoints; };
+	//UFUNCTION()	TArray<FVector> GetPatrollingPoints() { return PatrollingPoints; };
+	//UFUNCTION() TArray<ATargetPoint*> GetPatrollingPoints() { return PatrollingPoints; };
+
 	UFUNCTION()	float GetMovementAccurency() { return MovementAccurency; };
 
 	UFUNCTION()	FVector GetTurretForwardVector();
 	UFUNCTION()	void RotateTurretTo(FVector TargetPosition);
 
 	FVector GetEyesPosition();
+
+	UFUNCTION() TArray<FVector> GetPatrollingPoints();
+	//TArray<ATargetPoint*> GetPatrollingPoints();
+	void SetPatrollingPoints(TArray<ATargetPoint*> NewPatrollingPoints);
 
 protected:
 
@@ -100,8 +107,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
 	TArray<TSubclassOf<ACannon>> HaveCannons;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params|Patrol points" , Meta = (MakeEditWidget = true))
-	TArray<FVector> PatrollingPoints;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params|Patrol points old" , Meta = (MakeEditWidget = true))
+	//TArray<FVector> PatrollingPoints;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params|Patrol points", Meta = (MakeEditWidget = true))
+	TArray<ATargetPoint*> PatrollingPoints;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params | Accurency")
 	float MovementAccurency = 50;
 

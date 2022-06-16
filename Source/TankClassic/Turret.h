@@ -7,8 +7,8 @@
 #include "HealthComponent.h"
 #include "GameStructs.h"
 #include "TankPawn.h"
+#include "Components/ArrowComponent.h"
 #include "Turret.generated.h"
-
 
 UCLASS()
 class TANKCLASSIC_API ATurret : public AActor, public IDamageTaker

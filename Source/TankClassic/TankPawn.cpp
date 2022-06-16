@@ -5,13 +5,7 @@
 // Конструктор класса ТАНК
 //=====================================================================================================
 ATankPawn::ATankPawn(){
-	//-----------------------------------------------------------------
-	// Обновлять каждый тик чтобы можно было двигать танк
-	//-----------------------------------------------------------------
 	PrimaryActorTick.bCanEverTick = true;
-
-	//-----------------------------------------------------------------
-	// Создание объектов танка при спавне
 	//-----------------------------------------------------------------
 	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank body"));
 	RootComponent = BodyMesh;
@@ -42,7 +36,6 @@ ATankPawn::ATankPawn(){
 	//-----------------------------------------------------------------
 	HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Hit collider"));
 	HitCollider->SetupAttachment(BodyMesh);
-
 }
 
 //=====================================================================================================
@@ -233,3 +226,21 @@ void ATankPawn::RotateTurretTo(FVector TargetPosition)
 //=====================================================================================================
 //=====================================================================================================
 FVector ATankPawn::GetEyesPosition(){ return CannonSetupPoint->GetComponentLocation(); }
+
+//=====================================================================================================
+//=====================================================================================================
+TArray<FVector> ATankPawn::GetPatrollingPoints()
+{
+	TArray<FVector> points;
+	for (ATargetPoint* point : PatrollingPoints)
+	{
+		points.Add(point->GetActorLocation());
+	}
+	return points;
+}
+
+
+void ATankPawn::SetPatrollingPoints(TArray<ATargetPoint*> NewPatrollingPoints)
+{
+	PatrollingPoints = NewPatrollingPoints;
+}

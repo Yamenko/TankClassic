@@ -14,10 +14,20 @@ AProjectile::AProjectile()
 	ProjectileMesh->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnMeshOverlapBegin);
 	ProjectileMesh->SetCollisionObjectType(ECC_GameTraceChannel1);
 	ProjectileMesh->SetGenerateOverlapEvents(true);
+
+	ShootEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Shoot effect"));
+	ShootEffect->SetupAttachment(RootComponent);
+	ShootEffect->SetAutoActivate(false);
+	
+
+	AudioEffect = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio effect"));
+	AudioEffect->SetupAttachment(RootComponent);
+	AudioEffect->SetAutoActivate(false);
 }
 
 void AProjectile::BeginPlay()
 {
+	/*ShootEffect->ActivateSystem(false);*/
 	Super::BeginPlay();
 	//ProjectileMesh->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnMeshOverlapBegin);
 }
@@ -68,13 +78,21 @@ void AProjectile::OnMeshOverlapBegin(
 			if (turret) { damageData.Score = turret->GetScoreOnDie(); }
 			else { damageData.Score = 0; }
 			damageTakerActor->TakeDamage(damageData);
-
+			ShootEffect->ActivateSystem();
+			AudioEffect->Play();
 		}
 		else
 		{
 			//OtherActor->Destroy();
 		}
-		Destroy();
+
+		AudioEffect->EndPlay(EEndPlayReason::Destroyed);
+		ShootEffect->EndPlay(EEndPlayReason::Destroyed);
+
+		if (!ShootEffect || !AudioEffect) {
+			Destroy();
+		}
+	
 	}
 
 
