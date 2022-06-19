@@ -8,6 +8,7 @@
 #include "Turret.h"
 #include "Cannon.h"
 #include "TankPawn.h"
+#include "ExploseEffect.h"
 #include "Projectile.generated.h"
 
 UCLASS()
@@ -24,10 +25,10 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UStaticMeshComponent* ProjectileMesh;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	UParticleSystemComponent* ShootEffect;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	UAudioComponent* AudioEffect;
+	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	//	UParticleSystemComponent* ShootEffect;
+	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	//	UAudioComponent* AudioEffect;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
 	float MoveSpeed = 100;
@@ -35,6 +36,8 @@ protected:
 	float MoveRate = 0.005f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Damage")
 	float Damage = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+	TSubclassOf<AExploseEffect> HitExploseEffect;
 
 	FTimerHandle MovementTimerHandle;
 

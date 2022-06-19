@@ -15,14 +15,14 @@ AProjectile::AProjectile()
 	ProjectileMesh->SetCollisionObjectType(ECC_GameTraceChannel1);
 	ProjectileMesh->SetGenerateOverlapEvents(true);
 
-	ShootEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Shoot effect"));
-	ShootEffect->SetupAttachment(RootComponent);
-	ShootEffect->SetAutoActivate(false);
-	
+	//ShootEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Shoot effect"));
+	//ShootEffect->SetupAttachment(RootComponent);
+	//ShootEffect->SetAutoActivate(false);
+	//
 
-	AudioEffect = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio effect"));
-	AudioEffect->SetupAttachment(RootComponent);
-	AudioEffect->SetAutoActivate(false);
+	//AudioEffect = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio effect"));
+	//AudioEffect->SetupAttachment(RootComponent);
+	//AudioEffect->SetAutoActivate(false);
 }
 
 void AProjectile::BeginPlay()
@@ -78,21 +78,20 @@ void AProjectile::OnMeshOverlapBegin(
 			if (turret) { damageData.Score = turret->GetScoreOnDie(); }
 			else { damageData.Score = 0; }
 			damageTakerActor->TakeDamage(damageData);
-			ShootEffect->ActivateSystem();
-			AudioEffect->Play();
+
 		}
 		else
 		{
 			//OtherActor->Destroy();
 		}
+		
+		// «апускаем Ёффекты по последним координатам снар€да
+		//AExploseEffect* StartHitExploseEffect = Cast<AExploseEffect>(HitExploseEffect);
+		/*StartHitExploseEffect->PlayEffect(GetActorTransform());*/
 
-		AudioEffect->EndPlay(EEndPlayReason::Destroyed);
-		ShootEffect->EndPlay(EEndPlayReason::Destroyed);
+		AExploseEffect* StartHitExploseEffect = GetWorld()->SpawnActor<AExploseEffect>(HitExploseEffect, GetActorTransform());
 
-		if (!ShootEffect || !AudioEffect) {
-			Destroy();
-		}
-	
+		Destroy();
 	}
 
 
