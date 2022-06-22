@@ -19,7 +19,9 @@ class TANKCLASSIC_API ATankFactory : public AActor, public IDamageTaker
 		GENERATED_BODY()
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	UStaticMeshComponent * BuildingMesh;
+	UStaticMeshComponent* BuildingMesh;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UStaticMeshComponent* BuildingMeshAfterDie;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	UArrowComponent* TankSpawnPoint;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
@@ -34,15 +36,21 @@ protected:
 	TArray<ATargetPoint*> TankWayPoints;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn tanks params")
 	AMapLoader* LinkedMapLoader;
-
-public:
-
-	ATankFactory();
-	UFUNCTION()	void TakeDamage(FDamageData DamageData);
-protected:
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UParticleSystemComponent* SpawnEffect;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UAudioComponent* AudioEffect;
 
 	virtual void BeginPlay() override;
 	UFUNCTION() void SpawnNewTank();
 	UFUNCTION()	void Die();
 	UFUNCTION()	void DamageTaked(float DamageValue);
+
+public:
+	ATankFactory();
+	UFUNCTION()	void TakeDamage(FDamageData DamageData);
+
+private:
+	bool isAlive;
+
 };

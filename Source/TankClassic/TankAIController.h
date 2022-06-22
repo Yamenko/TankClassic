@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "TankPawn.h"
+#include "MapLoader.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "DrawDebugHelpers.h"
 #include "TankAIController.generated.h"

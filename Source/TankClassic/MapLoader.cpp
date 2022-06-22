@@ -4,14 +4,19 @@ AMapLoader::AMapLoader()
 {
 	USceneComponent* sceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = sceneComp;
+
 	GatesMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Gates Mesh"));
 	GatesMesh->SetupAttachment(sceneComp);
+
 	ActivatedLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("Activated lights"));
 	ActivatedLight->SetupAttachment(sceneComp);
+
 	DeactivatedLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("Deactivated lights"));
 	DeactivatedLight->SetupAttachment(sceneComp);
+
 	TriggerCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger collider"));
 	TriggerCollider->SetupAttachment(sceneComp);
+
 	TriggerCollider->OnComponentBeginOverlap.AddDynamic(this, &AMapLoader::OnTriggerOverlapBegin);
 	SetActiveLights();
 }

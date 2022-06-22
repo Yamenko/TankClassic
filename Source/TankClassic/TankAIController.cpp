@@ -5,16 +5,16 @@
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	TankPawn = Cast<ATankPawn>(GetPawn());
-	PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
-	FVector pawnLocation = TankPawn->GetActorLocation();
-	MovementAccurency = TankPawn->GetMovementAccurency();
-	TArray<FVector> points = TankPawn->GetPatrollingPoints();
-	for (FVector point : points)
-	{
-		PatrollingPoints.Add(point + pawnLocation);
-	}
-	CurrentPatrolPointIndex = 0;
+	//TankPawn = Cast<ATankPawn>(GetPawn());
+	//PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
+	//FVector pawnLocation = TankPawn->GetActorLocation();
+	//MovementAccurency = TankPawn->GetMovementAccurency();
+	//TArray<FVector> points = TankPawn->GetPatrollingPoints();
+	//for (FVector point : points)
+	//{
+	//	PatrollingPoints.Add(point + pawnLocation);
+	//}
+	//CurrentPatrolPointIndex = 0;
 
 	Initialize();
 }
@@ -27,8 +27,6 @@ void ATankAIController::Tick(float DeltaTime)
 	if (!TankPawn){ Initialize(); }	
 	if (!TankPawn){ return; }
 
-	TankPawn->MoveForward(1);
-	Super::Tick(DeltaTime);
 	TankPawn->MoveForward(1);
 	float rotationValue = GetRotationgValue();
 	TankPawn->RotateRight(rotationValue);
